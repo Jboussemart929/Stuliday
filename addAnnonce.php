@@ -128,3 +128,5 @@ $categories = $res->fetchAll();
 </div>
 <div>
 </form>
+<?php
+require 'includes/footer.php';
