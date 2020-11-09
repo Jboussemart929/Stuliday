@@ -9,7 +9,12 @@ require 'includes/header.php';
 $sql = 'SELECT * FROM categories';
 $res = $conn->query($sql);
 $categories = $res->fetchAll();
-
+//
+//global $conn;
+//$sth- = $conn->prepare('SELECT * FROM categories WHERE ')
+//$sth->execute();
+//$    =$sth->(PDO::FETCH_ASSOC);
+//
 if (isset($_POST['search_form'])) {
     $category = intval(strip_tags($_POST['product_category']));
     $search_text = strip_tags($_POST['search_text']);
@@ -17,6 +22,7 @@ if (isset($_POST['search_form'])) {
     $sql2 = "SELECT * FROM products WHERE category_id LIKE '%{$category}%' AND products_name LIKE '%{$search_text}%'";
     $res2 = $conn->query($sql2);
     $search = $res2->fetchAll();
+    
 }
 ?>
 
@@ -70,7 +76,7 @@ if (isset($_POST['search_form'])) {
     <?php
             }
         } else {
-            affichageProduits();
+            affichageProduits($_SESSION['id']);
         }
         ?>
 </div>

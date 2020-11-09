@@ -59,22 +59,23 @@ function connexion($email, $password)
     }
 }
 
-function affichageProduits()
+function affichageProduits($id)
 {
     global $conn;
-    $sth = $conn->prepare("SELECT a.*,c.categories_name,u.email FROM annonces AS a LEFT JOIN categories AS c ON a.category_id = c.categories_id
-    LEFT JOIN users AS u ON a.author = u.id WHERE a.ad_id = {$id}");
+    $sth = $conn->prepare("SELECT p.*,c.categories_name FROM annonces AS p LEFT JOIN categories AS c ON p.category_id = c.categories_id");
+   // $sth = $conn->prepare("SELECT a.*,c.categories_name,u.email FROM annonces AS a LEFT JOIN categories AS c ON a.category_id = c.categories_id
+    //LEFT JOIN users AS u ON a.author = u.id WHERE a.ad_id = {$id}");
     $sth->execute();
 
     $products = $sth->fetchAll(PDO::FETCH_ASSOC);
     foreach ($products as $product) {
         ?>
 <tr>
-    <th scope="row"><?php echo $product['products_id']; ?>
+    <th scope="row"><?php echo $product['ad_id']; ?>
     </th>
-    <td><?php echo $product['products_name']; ?>
+    <td><?php echo $product['title']; ?>
     </td>
-    <td><?php echo $product['description']; ?>
+    <td><?php echo $product['content']; ?>
     </td>
     <td><?php echo $product['price']; ?>
     </td>
@@ -82,10 +83,10 @@ function affichageProduits()
     </td>
     <td><?php echo $product['categories_name']; ?>
     </td>
-    <td><?php echo $product['username']; ?>
+    <td><?php echo $product['author']; ?>
     </td>
     <td> <a
-            href="product.php/?id=<?php echo $product['products_id']; ?>">Afficher
+            href="annonce.php/?id=<?php echo $product['ad_id']; ?>">Afficher
             article</a>
     </td>
 </tr>

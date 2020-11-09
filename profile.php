@@ -16,8 +16,7 @@ if (isset($_GET['s'])) {
 ?>
 <div class="row">
     <div class="col-8">
-        <h3>Bienvenue <?php echo $user['username']; ?>
-        </h3>
+        <h3>Bienvenue <?php echo $user['email']; ?>        </h3>
         <form action="process.php" method="POST">
             <div class="form-group">
                 <label for="InputPhone1">Votre numéro de téléphone</label>

@@ -43,10 +43,12 @@
         <div class="navbar-end">
             <?php
             if (!empty($_SESSION)) {
+                
                 ?>
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
                     <?php echo $_SESSION['email']; ?>
+                                        
                 </a>
 
                 <div class="navbar-dropdown">
