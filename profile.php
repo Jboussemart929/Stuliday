@@ -60,7 +60,7 @@ if (isset($_GET['s'])) {
                                         <th scope="col">Prix</th>
                                         <th scope="col">Ville</th>
                                         <th scope="col">Categorie</th>
-                                        <th scope="col" colspan=3>Fonctions</th>
+                                        <th scope="col">Fonctions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -75,7 +75,7 @@ if (isset($_GET['s'])) {
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Quitter</button>
             </div>
         </div>
     </div>

@@ -16,7 +16,7 @@ $categories = $res->fetchAll();
 <div class="field">
   <label class="label">Nom de votre annonce</label>
   <div class="control">
-    <input class="inputannonce" type="text" placeholder="tapez le nom de votre annonce" name="product_name">
+    <input class="inputannonce" type="text" placeholder="tapez le nom de votre annonce" name="product_title">
   </div>
 </div>
 <div class="field">

@@ -62,7 +62,8 @@ function connexion($email, $password)
 function affichageProduits()
 {
     global $conn;
-    $sth = $conn->prepare("SELECT a.*,c.categories_name,u.email FROM annonces AS a LEFT JOIN categories AS c ON a.category_id = c.categories_id LEFT JOIN users AS u ON a.author = u.id WHERE a.ad_id ={$id}");
+    $sth = $conn->prepare("SELECT a.*,c.categories_name,u.email FROM annonces AS a LEFT JOIN categories AS c ON a.category_id = c.categories_id
+    LEFT JOIN users AS u ON a.author = u.id WHERE a.ad_id = {$id}");
     $sth->execute();
 
     $products = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -91,10 +92,52 @@ function affichageProduits()
 <?php
     }
 }
+
+
+function affichageProduitsByUser($user_id)
+{
+    global $conn;
+    $sth = $conn->prepare("SELECT p.*,c.categories_name FROM products AS p LEFT JOIN categories AS c ON p.category_id = c.categories_id WHERE p.user_id = {$user_id}");
+    $sth->execute();
+
+    $products = $sth->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($products as $product) {
+        ?>
+<tr>
+    <th scope="row"><?php echo $product['products_id']; ?>
+    </th>
+    <td><?php echo $product['products_name']; ?>
+    </td>
+    <td><?php echo shorten_text($product['description']); ?>
+    </td>
+    <td><?php echo $product['price']; ?> €
+    </td>
+    <td><?php echo $product['city']; ?>
+    </td>
+    <td><?php echo $product['categories_name']; ?>
+    </td>
+    <td> <a href="product.php?id=<?php echo $product['products_id']; ?>"
+            class="fa btn btn-outline-primary"><i class="fas fa-eye"></i></a>
+    </td>
+    <td> <a href="editproducts.php?id=<?php echo $product['products_id']; ?>"
+            class="fa btn btn-outline-warning"><i class="fas fa-pen"></i></a>
+    </td>
+    <td>
+        <form action="process.php" method="post">
+            <input type="hidden" name="product_id"
+                value="<?php echo $product['products_id']; ?>">
+            <input type="submit" name="product_delete" class="fa btn btn-outline-danger" value="&#xf2ed;"></input>
+        </form>
+    </td>
+</tr>
+<?php
+    }
+}
 function affichageProduit($id)
 {
     global $conn;
-    $sth = $conn->prepare("SELECT a.*,c.categories_name,u.email FROM annonces AS a LEFT JOIN categories AS c ON a.category_id = c.categories_id LEFT JOIN users AS u ON a.author = u.id WHERE a.ad_id = {$id}");
+    $sth = $conn->prepare("SELECT a.*,c.categories_name,u.email FROM annonces AS a LEFT JOIN categories AS c ON a.category_id = c.categories_id
+     LEFT JOIN users AS u ON a.author = u.id WHERE a.ad_id = {$id}");
     $sth->execute();
 
     $annonces = $sth->fetch(PDO::FETCH_ASSOC); ?>
@@ -128,18 +171,37 @@ function ajoutProduits($title,$content,$address,$price,$author,$category_id)
             $sth->bindValue(':content', $content, PDO::PARAM_STR);
             $sth->bindValue(':price', $price, PDO::PARAM_INT);
             $sth->bindValue(':address', $address, PDO::PARAM_STR);
-            $sth->bindValue(':category_id', $category_id, PDO::PARAM_INT);
             $sth->bindValue(':author', $author, PDO::PARAM_INT);
+            $sth->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+            
 
             // Affichage conditionnel du message de réussite
             if ($sth->execute()) {
-                echo "<div class='alert alert-success'> Votre article a été ajouté à la base de données </div>";
+                //echo "<div class='alert alert-success'> Votre article a été ajouté à la base de données </div>";
                 header('Location: annonce.php?id='.$conn->lastInsertId());
             }
         } catch (PDOException $e) {
-            echo 'tamere';
+           
             echo 'Error: '.$e->getMessage();
 
         }
+    }
+}
+// Fonction de suppression des produits. Les arguments renseignés sont des placeholders étant donné qu'ils seront remplacés par les véritables variables une fois la fonction appelée;
+function suppProduits($user_id, $produit_id)
+{
+    // Récupération de la connexion à la BDD à partir de l'espace global.
+    global $conn;
+
+    // Tentative de la requête de suppression.
+    try {
+        $sth = $conn->prepare('DELETE FROM products WHERE products_id = :products_id AND user_id =:user_id');
+        $sth->bindValue(':products_id', $produit_id);
+        $sth->bindValue(':user_id', $user_id);
+        if ($sth->execute()) {
+            header('Location:profile.php?s');
+        }
+    } catch (PDOException $e) {
+        echo 'Error: '.$e->getMessage();
     }
 }
