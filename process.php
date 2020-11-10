@@ -38,14 +38,14 @@
 
             modifProduits($title, $description, $price, $city, $category, $id, $user_id);
         }
-    } elseif (isset($_POST['product_delete'])) {
-        $product = $_POST['product_id'];
+    } elseif (isset($_POST['ad_delete'])) {
+        $annonce = $_POST['ad_id'];
         $user_id = $_SESSION['id'];
 
-        suppProduits($author, $product);
+        suppProduits($user_id, $annonce);
     } elseif (isset($_POST['user_edit'])) {
         $author = $_POST['user_id'];
-        $phone = $_POST['user_phone'];
+        
 
       echo 'hello';
     }

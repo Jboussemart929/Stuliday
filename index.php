@@ -34,7 +34,8 @@ require 'includes/header.php';
             Bienvenue sur Stuliday !
           </h1>
           <h2 class="subtitle is-4">
-            Come to discover our places to stay, or you can even add your own !
+            
+Venez découvrir nos hébergements, ou vous pouvez même ajouter le vôtre!
           </h2>
         </div>
       </div>

@@ -25,6 +25,7 @@ if (isset($_POST['search_form'])) {
     
 }
 ?>
+<div class="container">
 
 <form action="products.php" method="post">
     <div class="form-inline">
@@ -46,33 +47,55 @@ if (isset($_POST['search_form'])) {
         </div>
         <input type="submit" value="Recherche" name="search_form" class=" mb-2 btn btn-info">
         <?php if (isset($search)) {
-    echo '<a href="products.php" class="btn btn-danger mx-2 mb-2">Reset</a>';
+    echo '<a href="annonces.php" class="btn btn-danger mx-2 mb-2">Reset</a>';
 } ?>
     </div>
 </form>
+</div>
 
-<div class="row">
-    <?php
+<div class="columns">
+
+
+
+</div>
+
+<?php
         if (isset($search)) {
             foreach ($search as $product) {?>
-    <div class="card mx-2" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title"><?php echo $product['products_name']; ?>
-            </h5>
-            <h6 class="card-subtitle mb-2 text-muted"><?php echo $product['city']; ?>
-            </h6>
-            <p class="card-text"><?php echo $product['description']; ?>
-            </p>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><?php echo $product['price']; ?>
-                    €</li>
-                <li class="list-group-item"><?php echo $product['city']; ?>
-                </li>
-            </ul>
-            <a href="product.php?id=<?php echo $product['products_id']; ?>"
-                class="card-link btn btn-primary">Afficher article</a>
-        </div>
+            <div class="column is-4">
+            <div class="card">
+            <!-- ////tentaive de création de card/// -->
+  <!-- <div class="card-image">
+    <figure class="image is-4by3">
+      <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+    </figure>
+  </div>
+  <div class="card-content">
+  
+    <div class="media">
+      <div class="media-left">
+        <figure class="image is-48x48">
+          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+        </figure>
+      </div>
+      <div class="media-content">
+        <p class="title is-4"><?php echo $products['products_name']; ?>John Smith</p>
+        <p class="subtitle is-6">@johnsmith</p>
+      </div>
     </div>
+
+    <div class="content">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+      <a href="#">#css</a> <a href="#">#responsive</a>
+      <br>
+      <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+    </div>
+  </div>
+</div> -->
+
+         
+
     <?php
             }
         } else {
@@ -80,5 +103,7 @@ if (isset($_POST['search_form'])) {
         }
         ?>
 </div>
+</div>
+
 <?php
 require 'includes/footer.php';
