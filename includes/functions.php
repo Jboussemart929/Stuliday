@@ -10,23 +10,23 @@ function inscription($email, $password1, $password2)
         $res1 = $conn->query($sql1);
         $count_email = $res1->fetchColumn();
         if (!$count_email) {
-                if ($password1 === $password2) {
-                    $password1 = password_hash($password1, PASSWORD_DEFAULT);
-                    $sth = $conn->prepare('INSERT INTO users (email, password) VALUES (:email,:password)');
-                    $sth->bindValue(':email', $email);
-                    $sth->bindValue(':password', $password1);
-                    $sth->execute();
-                    echo "<div class='alert alert-success mt-2'> L'utilisateur a bien été enregistré, vous pouvez désormais vous connecter</div>";
-                } else {
-                    echo 'Les mots de passe ne concordent pas !';
-                    unset($_POST);
-                }
+            if ($password1 === $password2) {
+                $password1 = password_hash($password1, PASSWORD_DEFAULT);
+                $sth = $conn->prepare('INSERT INTO users (email, password) VALUES (:email,:password)');
+                $sth->bindValue(':email', $email);
+                $sth->bindValue(':password', $password1);
+                $sth->execute();
+                echo "<div class='alert alert-success mt-2'> L'utilisateur a bien été enregistré, vous pouvez désormais vous connecter</div>";
+            } else {
+                echo 'Les mots de passe ne concordent pas !';
+                unset($_POST);
+            }
         } elseif ($count_email > 0) {
             echo 'Cette adresse mail existe déja !';
             unset($_POST);
         }
     } catch (PDOException $e) {
-        echo 'Error: '.$e->getMessage();
+        echo 'Error: ' . $e->getMessage();
     }
 }
 
@@ -55,7 +55,7 @@ function connexion($email, $password)
             unset($_POST);
         }
     } catch (PDOException $e) {
-        echo 'Error: '.$e->getMessage();
+        echo 'Error: ' . $e->getMessage();
     }
 }
 
@@ -63,34 +63,33 @@ function affichageProduits()
 {
     global $conn;
     $sth = $conn->prepare("SELECT p.*,c.categories_name FROM annonces AS p LEFT JOIN categories AS c ON p.category_id = c.categories_id");
-   // $sth = $conn->prepare("SELECT a.*,c.categories_name,u.email FROM annonces AS a LEFT JOIN categories AS c ON a.category_id = c.categories_id
+    // $sth = $conn->prepare("SELECT a.*,c.categories_name,u.email FROM annonces AS a LEFT JOIN categories AS c ON a.category_id = c.categories_id
     //LEFT JOIN users AS u ON a.author = u.id WHERE a.ad_id = {$id}");
     $sth->execute();
 
     $products = $sth->fetchAll(PDO::FETCH_ASSOC);
     foreach ($products as $product) {
-        ?>
-<tr>
-    <th scope="row"><?php echo $product['ad_id']; ?>
-    </th>
-    <td><?php echo $product['title']; ?>
-    </td>
-    <td><?php echo $product['content']; ?>
-    </td>
-    <td><?php echo $product['price']; ?>
-    </td>
-    <td><?php echo $product['city']; ?>
-    </td>
-    <td><?php echo $product['categories_name']; ?>
-    </td>
-    <td><?php echo $product['author']; ?>
-    </td>
-    <td> <a
-            href="annonce.php?id=<?php echo $product['ad_id']; ?>">Afficher
-            l'annonce</a>
-    </td>
-</tr>
-<?php
+?>
+        <tr>
+            <th scope="row"><?php echo $product['ad_id']; ?>
+            </th>
+            <td><?php echo $product['title']; ?>
+            </td>
+            <td><?php echo $product['content']; ?>
+            </td>
+            <td><?php echo $product['price']; ?>
+            </td>
+            <td><?php echo $product['city']; ?>
+            </td>
+            <td><?php echo $product['categories_name']; ?>
+            </td>
+            <td><?php echo $product['author']; ?>
+            </td>
+            <td> <a href="annonce.php?id=<?php echo $product['ad_id']; ?>">Afficher
+                    l'annonce</a>
+            </td>
+        </tr>
+    <?php
     }
 }
 
@@ -104,37 +103,35 @@ function affichageProduitsByUser($id)
 
     $products = $sth->fetchAll(PDO::FETCH_ASSOC);
     foreach ($products as $product) {
-        ?>
-<tr>
-    <th scope="row"><?php echo $product['ad_id']; ?>
-    </th>
-    <td><?php echo $product['title']; ?>
-    </td>
-    <td><?php echo $product['content']; ?>
-    </td>
-    <td><?php echo $product['price']; ?> €
-    </td>
-    <td><?php echo $product['city']; ?>
-    </td>
-    <td><?php echo $product['categories_name']; ?>
-    </td>
-    
-    
-    <td> <a href="product.php?id=<?php echo $product['ad_id']; ?>"
-            class="fa btn btn-outline-primary"><i class="fas fa-eye"></i></a>
-    </td>
-    <td> <a href="editproducts.php?id=<?php echo $product['ad_id']; ?>"
-            class="fa btn btn-outline-warning"><i class="fas fa-pen"></i></a>
-    </td>
-    <td>
-        <form action="process.php" method="post">
-            <input type="hidden" name="ad_id"
-                value="<?php echo $product['ad_id']; ?>">
-            <input type="submit" name="ad_delete" class="fa btn btn-outline-danger" value="&#xf2ed;"></input>
-        </form>
-    </td>
-</tr>
-<?php
+    ?>
+        <tr>
+            <th scope="row"><?php echo $product['ad_id']; ?>
+            </th>
+            <td><?php echo $product['title']; ?>
+            </td>
+            <td><?php echo $product['content']; ?>
+            </td>
+            <td><?php echo $product['price']; ?> €
+            </td>
+            <td><?php echo $product['city']; ?>
+            </td>
+            <td><?php echo $product['categories_name']; ?>
+            </td>
+
+
+            <td> <a href="product.php?id=<?php echo $product['ad_id']; ?>" class="fa btn btn-outline-primary"><i class="fas fa-eye"></i></a>
+            </td>
+            <td> <a href="editproducts.php?id=<?php echo $product['ad_id']; ?>" class="fa btn btn-outline-warning"><i class="fas fa-pen"></i></a>
+            </td>
+            <td>
+                <form action="process.php" method="post">
+                    <input type="hidden" name="ad_id" value="<?php echo $product['ad_id']; ?>">
+                    <input type="submit" name="ad_delete" class="fa btn btn-outline-danger" value="Supprimer votre Annonce"></input>
+                    <input type="submit" name="product_edit" class="fa btn btn-outline-danger" value="Modifier votre Annonce"></input>
+                </form>
+            </td>
+        </tr>
+    <?php
     }
 }
 function affichageProduit($id)
@@ -145,24 +142,24 @@ function affichageProduit($id)
     $sth->execute();
 
     $annonces = $sth->fetch(PDO::FETCH_ASSOC); ?>
-<div class="row">
-    <div class="col-12">
-        <h1><?php echo $annonces['title']; ?>
-        </h1>
-        <p><?php echo $annonces['content']; ?>
-        </p>
-        <p><?php echo $annonces['address']; ?>
-        </p>
-        
-        <p><?php echo $annonces['price']; ?>
-        </p>
-        
+    <div class="row">
+        <div class="col-12">
+            <h1><?php echo $annonces['title']; ?>
+            </h1>
+            <p><?php echo $annonces['content']; ?>
+            </p>
+            <p><?php echo $annonces['address']; ?>
+            </p>
+
+            <p><?php echo $annonces['price']; ?>
+            </p>
+
+        </div>
     </div>
-</div>
 <?php
 }
 
-function ajoutProduits($title,$content,$address,$price,$author,$category_id)
+function ajoutProduits($title, $content, $address, $price, $author, $category_id)
 {
     global $conn;
     // Vérification du prix (doit être un entier, et inférieur à 1 million d'euros)
@@ -177,41 +174,41 @@ function ajoutProduits($title,$content,$address,$price,$author,$category_id)
             $sth->bindValue(':address', $address, PDO::PARAM_STR);
             $sth->bindValue(':author', $author, PDO::PARAM_INT);
             $sth->bindValue(':category_id', $category_id, PDO::PARAM_INT);
-            
+
 
             // Affichage conditionnel du message de réussite
             if ($sth->execute()) {
                 //echo "<div class='alert alert-success'> Votre article a été ajouté à la base de données </div>";
-                header('Location: annonce.php?id='.$conn->lastInsertId());
+                header('Location: annonce.php?id=' . $conn->lastInsertId());
             }
         } catch (PDOException $e) {
-           
-            echo 'Error: '.$e->getMessage();
 
+            echo 'Error: ' . $e->getMessage();
         }
     }
 }
 
 
-function modifProduits($title,$content,$address,$price,$author,$category_id)
+function modifProduits($title, $content, $address, $price, $author, $category_id)
 {
     global $conn;
     if (is_int($price) && $price > 0 && $price < 1000000) {
         try {
-            $sth = $conn->prepare('UPDATE products SET products_name=:products_name, description=:description, price=:price,city=:city, category_id=:category_id WHERE products_id=:products_id AND user_id=:user_id');
-            $sth->bindValue(':title', $name);
-            $sth->bindValue(':content', $description);
-            $sth->bindValue(':price', $price);
-            $sth->bindValue(':city', $city);
-            $sth->bindValue(':category_id', $category);
-            $sth->bindValue(':products_id', $id);
-            $sth->bindValue(':user_id', $user_id);
+            $sth = $conn->prepare('UPDATE annonces SET products_name=:products_name, description=:description, price=:price,city=:city, category_id=:category_id WHERE products_id=:products_id AND user_id=:user_id');
+            $sth = $conn->prepare('INSERT INTO annonces (title,content,address,price,author,category_id) VALUES (:title,:content,:address,:price,:author,:category_id)');
+            $sth->bindValue(':title', $title, PDO::PARAM_STR);
+            $sth->bindValue(':content', $content, PDO::PARAM_STR);
+            $sth->bindValue(':price', $price, PDO::PARAM_INT);
+            $sth->bindValue(':address', $address, PDO::PARAM_STR);
+            $sth->bindValue(':author', $author, PDO::PARAM_INT);
+            $sth->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+
             if ($sth->execute()) {
                 echo "<div class='alert alert-success'> Votre modification a bien été prise en compte </div>";
-                header("Location: annonce.php?id={$id}");
+                header("Location: editannonce.php?id={$author}");
             }
         } catch (PDOException $e) {
-            echo 'Error: '.$e->getMessage();
+            echo 'Error: ' . $e->getMessage();
         }
     }
 }
@@ -230,6 +227,6 @@ function suppProduits($user_id, $ad_id)
             header('Location:profile.php?s');
         }
     } catch (PDOException $e) {
-        echo 'Error: '.$e->getMessage();
+        echo 'Error: ' . $e->getMessage();
     }
 }
